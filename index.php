@@ -1,6 +1,11 @@
 <?php
     require "conn.php";
 
+      //If user is not logged in redirect to login
+    if(!isset($_SESSION['user_id'])){
+      header("Location:login.php");
+    }
+
   if(isset($_GET['product_id'])){
 
     $product_id=$_GET['product_id'];
