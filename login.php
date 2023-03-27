@@ -1,5 +1,6 @@
 <?php
   require "conn.php";
+ 
 
   //If user is already logged in redirect to index
   if(isset($_SESSION['user_id'])){
@@ -22,13 +23,14 @@
 
           header("Location:index.php");
         }else{
-          echo "Invalid login credentials";
+          $_SESSION['error_msg']='Invalid login credentials';
         }
       }else{
-        echo "Invalid login credentials";
+        $_SESSION['error_msg']='Invalid login credentials';
       } 
   }
-?>
+  
+ ?>
 
 <!doctype html>
 <html lang="en">
@@ -40,7 +42,19 @@
   </head>
   <body>
     <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4">
+
+        </div>
+        <div class="col-lg-4">
       <h1 class="mt-5"> Login </h1>
+
+      <?php if(isset($_SESSION['error_msg'])): ?>
+      <div class="alert alert-danger" role="alert">
+         <?=$_SESSION['error_msg']?>
+         <?php unset($_SESSION['error_msg'])?>
+      </div>
+      <?php endif; ?>
       <form method="post" action="">
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -54,7 +68,10 @@
       
       <button type="submit" name="submit" class="btn btn-primary">Login</button>
     </form>
+</div>
+</div>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+      
     </body>
-  </div>
+ 
 </html>

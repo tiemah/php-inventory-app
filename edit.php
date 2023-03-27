@@ -1,5 +1,6 @@
 <?php
     require "conn.php";
+    require "navbar.php";
 
     $product_id=$_GET['product_id'];
 
@@ -13,29 +14,49 @@
         $price=$_POST['price'];
         $quantity=$_POST['quantity'];
 
-        $query=mysqli_query($conn,"UPDATE products SET product_name='$pname',price='$price',quantity='$quantity' WHERE product_id='$product_id'");
+        $query=mysqli_query($conn,"UPDATE products SET product_name='$pname',price='$price',quantity='$quantity' WHERE product_id='$product_id'")or die(mysqli_error($conn));
 
         if($query){
+
+            if(!headers_sent()){
+                $_SESSION['success_msg']="Product updated successfully!";
+            }
+
             header("Location:index.php");
         }else{
-            echo "Unable to update record!";
+            $_SESSION['error_msg']="Unable to update record!";
         }
     }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Product</title>
+<title>Edit product</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 </head>
 <body>
-<form action="" method="post">
-  <label for="product_name">Product name:</label><br>
-  <input type="text" id="pname" name="pname" value="<?php echo $row['product_name'];?>"><br>
-  <label for="price">Price:</label><br>
-  <input type="text" id="price" name="price" value="<?php echo $row['price'];?>"><br>
-  <label for="price">Quantity:</label><br>
-  <input type="text" id="quantity" name="quantity" value="<?php echo $row['quantity'];?>"><br><br>
-  <input type="submit" name="submit" value="Update">
-</form> 
+    <div class="row">
+        <div class="col-lg-4">
+    </div>          
+    <div class="col-lg-4">
+        <h2 class="mt-4">Edit product</h2>
+        <?php if(isset($_SESSION['error_msg'])): ?>
+        <div class="alert alert-danger" role="alert">
+            <?=$_SESSION['error_msg']?>
+            <?php unset($_SESSION['error_msg'])?>
+        </div>
+        <?php endif; ?>
+        <form action="" method="post">
+        <label for="product_name">Product name</label><br>
+        <input type="text" id="pname" name="product_name"  class="form-control" value="<?php echo $row['product_name'];?>"><br>
+        <label for="price">Price</label><br>
+        <input type="text" id="price" name="price" class="form-control" value="<?php echo $row['price'];?>"><br>
+        <label for="price">Quantity</label><br>
+        <input type="text" id="quantity" name="quantity"  class="form-control" value="<?php echo $row['quantity'];?>"><br><br>
+        <input type="submit" name="submit" class="btn btn-primary" value="Update">
+        </form>
+</div>
+</div> 
+
 </body>
 </html>
