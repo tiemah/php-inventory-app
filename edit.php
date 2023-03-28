@@ -10,11 +10,19 @@
 
     if(isset($_POST['submit'])){
 
-        $pname=$_POST['product_name'];
-        $price=$_POST['price'];
-        $quantity=$_POST['quantity'];
-
-        $query=mysqli_query($conn,"UPDATE products SET product_name='$pname',price='$price',quantity='$quantity' WHERE product_id='$product_id'")or die(mysqli_error($conn));
+        $product_name=mysqli_real_escape_string($conn,$_POST['product_name']);
+        $price=mysqli_real_escape_string($conn,$_POST['price']);
+        $quantity=mysqli_real_escape_string($conn,$_POST['quantity']);
+        if(empty($product_name)){
+            $_SESSION['error_msg']="Please enter product name to proceed!";
+        }elseif(empty($price)){
+            $_SESSION['error_msg']="Please enter price to proceed!";
+        }elseif(empty($quantity)){
+            $_SESSION['error_msg']="Please enter quantity to proceed!";
+        }elseif(!is_numeric($quantity)){
+            $_SESSION['error_msg']="Only numbers are allowed in the quantity field!";
+        }else{
+        $query=mysqli_query($conn,"UPDATE products SET product_name='$product_name',price='$price',quantity='$quantity' WHERE product_id='$product_id'")or die(mysqli_error($conn));
 
         if($query){
 
@@ -27,6 +35,7 @@
             $_SESSION['error_msg']="Unable to update record!";
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html>
