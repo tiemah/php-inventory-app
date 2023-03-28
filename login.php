@@ -54,6 +54,11 @@
          <?=$_SESSION['error_msg']?>
          <?php unset($_SESSION['error_msg'])?>
       </div>
+      <?php elseif(isset($_SESSION['success_msg'])): ?>
+        <div class="alert alert-success" role="alert">
+        <?=$_SESSION['success_msg']?>
+        <?php unset($_SESSION['success_msg'])?>
+      </div>
       <?php endif; ?>
       <form method="post" action="">
       <div class="mb-3">

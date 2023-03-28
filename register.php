@@ -1,6 +1,7 @@
 <?php
     require "conn.php";
-
+    require "includes/functions.php";
+   
     if(isset($_POST['submit'])){
 
         $full_name=$_POST['name'];
@@ -12,7 +13,23 @@
         $query=mysqli_query($conn,"INSERT INTO users(full_name,email,password_hash)VALUES('$full_name', '$email','$password_hash')") or die(mysqli_error($conn));
 
         if($query){
-            header("Location:login.php");
+
+          $subject="Registration Successful!";
+          $message="Thank you for signing up in our service";
+
+          if(SendMail($subject,$message)){
+
+            if(!headers_sent()){
+              $_SESSION['success_msg']="Registration successful. Check your email for more details!";
+              header("Location:login.php");
+            }
+          }else{
+            if(!headers_sent()){
+
+              $_SESSION['error_msg']="Registration successful.But welcome email was not sent. Please contact support!";
+              header("Location:login.php");
+            }
+          }
         }else{
             echo "Registration failed,please try again!";
         }
